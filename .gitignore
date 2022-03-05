@@ -1,0 +1,10 @@
+*
+!/**/
+!*.*
+*.o
+*.sav
+*.elf
+*.elf.map
+*.gba
+*.glyph
+*.binlst

@@ -1,0 +1,3 @@
+extern unsigned int _binary_res_words_binlst_start;
+extern unsigned int _binary_res_words_binlst_end;
+extern unsigned int _binary_res_words_binlst_size;
