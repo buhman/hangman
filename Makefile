@@ -38,7 +38,7 @@ DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 %.binlst: %.txt | make-tools
 	$(DIR)/tools/word-convert < $< > $@
 
-OBJS = header.o load.o main.o copy.o glyph.o keyboard.o hang.o
+OBJS = header.o load.o main.o copy.o glyph.o keyboard.o hang.o xorshift.o
 OBJS += res/font_8x8.glyph.o
 OBJS += res/font_8x16.glyph.o
 OBJS += res/words.binlst.o

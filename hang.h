@@ -22,6 +22,9 @@ typedef enum hang_word_color {
   HANG_P_DEAD = 4,
 } hang_word_color_t;
 
+void hang_word_length_init(void);
+void hang_entropy(u32 e);
+u32 hang_next_word_index(void);
 void hang_draw(u8 hang);
 void hang_guessed_draw(u32 guessed);
 void hang_word_draw(u32 word_ix, u32 guessed, hang_word_color_t color);

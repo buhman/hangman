@@ -3,6 +3,7 @@
 #include "type.h"
 #include "hang.h"
 #include "keyboard.h"
+#include "xorshift.h"
 #include "res/words.binlst.h"
 
 static inline void set_tile(int x, int y, int n)
@@ -148,7 +149,30 @@ void hang_guessed_draw(u32 guessed)
 }
 
 static const u8 * words = (const u8 *)(&_binary_res_words_binlst_start);
-//static const u32 words_size = (const u32)(&_binary_res_words_bin_size);
+static const u32 words_size = (const u32)(&_binary_res_words_binlst_size);
+static volatile u32 words_length;
+static xorshift_state_t rand_state = {
+  .a = 3127221310, .e = 0,
+};
+
+void hang_word_length_init(void)
+{
+  u32 length = 1;
+  while ((length <<= 1) < words_size) {
+  }
+  words_length = (length >> 5); // = ((length / 2) / 16)
+}
+
+void hang_entropy(u32 e)
+{
+  xorshift_add_entropy(&rand_state, e);
+}
+
+u32 hang_next_word_index(void)
+{
+  u32 ix = xorshift_rand(&rand_state, words_length);
+  return ix;
+}
 
 void hang_word_draw(u32 word_ix, u32 guessed, hang_word_color_t color)
 {

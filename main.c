@@ -37,6 +37,8 @@ typedef struct state {
 
 static state_t state = { 0 };
 
+static u32 tick = 0;
+
 static inline void key_input_count(count_flop_t * key, unsigned int input, unsigned int mask)
 {
   if (input & mask) {
@@ -53,6 +55,7 @@ static inline void key_input_count(count_flop_t * key, unsigned int input, unsig
 static inline int key_flopped(count_flop_t * key)
 {
   if (key->count == 2 && key->flop == 0) {
+    hang_entropy(tick);
     key->flop = 1;
     return 1;
   } else {
@@ -70,7 +73,7 @@ static inline void next_word(void)
 {
   state.guessed = (1 << 0 | 1 << 4 | 1 << 8 | 1 << 14 | 1 << 20);
   state.hang = HANG__LAST - 1;
-  state.word_ix += 1;
+  state.word_ix = hang_next_word_index();
 }
 
 static inline void keyboard_input(void)
@@ -93,6 +96,8 @@ void _user_isr(void)
   *(reg16 *)(IO_REG + IME) = 0;
 
   u32 ireq = *(reg16 *)(IO_REG + IF);
+
+  tick += 1;
 
   // hackety hack
   /*
@@ -271,6 +276,7 @@ void main(void)
 
   glyph_init_8x8(NORMAL_WHITE, NORMAL_BLACK, TILE_16(16));
   glyph_init_8x16(NORMAL_WHITE, NORMAL_BLACK, TILE_16(48));
+  hang_word_length_init();
 
   *(reg16 *)(IO_REG + DISPSTAT) = DISPSTAT__V_BLANK_INT_ENABLE;
 
