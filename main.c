@@ -35,7 +35,7 @@ typedef struct state {
   int word_ix;
 } state_t;
 
-static state_t state = { 0 };
+static state_t state = { .guessed = 0xffffffff };
 
 static u32 tick = 0;
 
@@ -63,15 +63,10 @@ static inline int key_flopped(count_flop_t * key)
   }
 }
 
-static const int keyboard_max_x[3] = {
-  [0] = 9,
-  [1] = 8,
-  [2] = 6,
-};
-
 static inline void next_word(void)
 {
-  state.guessed = (1 << 0 | 1 << 4 | 1 << 8 | 1 << 14 | 1 << 20);
+  state.guessed = ( 1 << 0 | 1 << 4 | 1 << 8 | 1 << 14 | 1 << 20
+                  );
   state.hang = HANG__LAST - 1;
   state.word_ix = hang_next_word_index();
 }

@@ -1,6 +1,14 @@
 void keyboard_draw(u32 col, u32 row);
 int keyboard_get_letter(int x, int y);
 
+#ifdef ROMANIAN
+#define KEYBOARD_COLS (13)
+#else
+#define KEYBOARD_COLS (10)
+#endif
+
+extern const int keyboard_max_x[3];
+
 typedef enum letter {
   _A_ = 0,
   _B_,
@@ -28,10 +36,11 @@ typedef enum letter {
   _X_,
   _Y_,
   _Z_,
-  _L_SQ_BRACE,
-  _BACKSLASH,
-  _R_SQ_BRACE,
-  _CAROT,
+  _A_CIRCUMFLEX_,
+  _I_CIRCUMFLEX_,
+  _A_BREVE_,
+  _S_COMMA_,
+  _T_COMMA_,
   _UNDERSCORE,
   LETTER_LAST
 } letter_t;

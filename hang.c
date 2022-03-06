@@ -133,18 +133,28 @@ void hang_draw(u8 hang)
   }
 }
 
+#ifdef ROMANIAN
+#define ALPHABET_LEN (26 + 5)
+#else
+#define ALPHABET_LEN (26)
+#endif
+
 void hang_guessed_draw(u32 guessed)
 {
-  for (int i = 0; i < 26; i++) {
+  for (int i = 0; i < ALPHABET_LEN; i++) {
     int tile;
     if (guessed & (1 << i)) {
       tile = (16 + i);
     } else {
       tile = 0;
     }
+    int non_basic = (i >= 26);
+    int row = non_basic ? 2 : 1;
+    int col = non_basic ? (i - 26) : i;
+
     *(reg16 *)( VRAM
               + SCREEN_BASE_BLOCK(31)
-              + ((32 + 2 + i) * 2)) = tile;
+              + (((32 * row) + 2 + col) * 2)) = tile;
   }
 }
 

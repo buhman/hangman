@@ -19,6 +19,7 @@ int load_char(FT_Face face, FT_ULong char_code, unsigned char * buf)
   assert(face->glyph->bitmap.num_grays == 2);
   assert(face->glyph->bitmap.pitch == 1);
   assert(face->glyph->bitmap.width <= 8);
+  //fprintf(stderr, "%ld %d\n", char_code, face->glyph->bitmap.rows);
   assert(face->glyph->bitmap.rows == 8 || face->glyph->bitmap.rows == 16);
 
   for (int y = 0; y < (int)face->glyph->bitmap.rows; y++) {
@@ -70,11 +71,35 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  unsigned char buf[(('_' - 'A') + 1) * face->available_sizes[0].height];
+#define ENGLISH (26)
+#define ROMANIAN (5)
+#define UNDERSCORE (1)
+#define CHARS (ENGLISH + ROMANIAN + UNDERSCORE)
+
+  unsigned char buf[CHARS * face->available_sizes[0].height];
   int ret;
   unsigned char * bufi = buf;
-  for (int c = 'A'; c <= '_'; c++) {
+  for (unsigned long c = 'A'; c <= 'Z'; c++) {
     ret = load_char(face, c, bufi);
+    if (ret == 0)
+      return -1;
+    bufi += ret;
+  }
+
+#define A_CIRCUMFLEX (194)
+#define I_CIRCUMFLEX (206)
+#define A_BREVE (258)
+#define S_COMMA (536)
+#define T_COMMA (538)
+
+  unsigned long extra_chars[] = {
+    //
+    A_CIRCUMFLEX, I_CIRCUMFLEX, A_BREVE, S_COMMA, T_COMMA, '_',
+  };
+
+  for (int i = 0; i < 6; i++) {
+    unsigned long ec = extra_chars[i];
+    ret = load_char(face, ec, bufi);
     if (ret == 0)
       return -1;
     bufi += ret;
