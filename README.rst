@@ -8,6 +8,10 @@ Overview
 
 A simple hangman game for Gameboy Advance.
 
+Get the latest prebuilt ROM image from:
+
+https://github.com/buhman/hangman/releases/latest
+
 Dependencies
 ------------
 
@@ -28,8 +32,8 @@ Build instructions
 
    make
 
-This will create ``main.gba`` which can be loaded on many Gameboy Emulators or
-burned to a physical rom cartridge.
+This will create ``main.gba`` which can be loaded on many Gameboy Advance
+emulators or burned to a physical rom cartridge.
 
 Emulator/hardware compatibility
 -------------------------------
