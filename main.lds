@@ -10,23 +10,23 @@ SECTIONS
 {
   . = 0x8000000;
 
-  .text : ALIGN(4)
+  .text ALIGN(4) : SUBALIGN(1)
   {
     KEEP(*(.rom.start_addr))
     KEEP(*(.rom.nintendo_logo))
     KEEP(*(.rom.header))
     *(.text.load)
-  } > gprom
-
-  . = 0x3000000;
+  } >gprom AT> gprom
 
   /* text */
 
-  rom.text : ALIGN(4) SUBALIGN(4)
+  . = 0x3000000;
+
+  rom.text ALIGN(32) : SUBALIGN(4)
   {
     *(.text*)
     . = (. + 0x1f) & ~0x1f;
-  } > iwram AT > gprom
+  } >iwram AT> gprom
 
   __text_link_start = ADDR(rom.text);
   __text_link_end = ADDR(rom.text) + SIZEOF(rom.text);
@@ -34,11 +34,11 @@ SECTIONS
 
   /* data */
 
-  rom.data BLOCK(32) : ALIGN(4)
+  rom.data ALIGN(32) : SUBALIGN(4)
   {
     *(.data)
     . = (. + 0x1f) & ~0x1f;
-  } > iwram AT > gprom
+  } >iwram AT> gprom
 
   __data_link_start = ADDR(rom.data);
   __data_link_end = ADDR(rom.data) + SIZEOF(rom.data);
@@ -46,22 +46,22 @@ SECTIONS
 
   /* bss */
 
-  rom.bss : ALIGN(4)
+  rom.bss ALIGN(32) : SUBALIGN(4)
   {
     *(.bss)
     . = (. + 0x1f) & ~0x1f;
-  } > iwram AT > gprom
+  } >iwram AT> gprom
 
   __bss_link_start = ADDR(rom.bss);
   __bss_link_end = ADDR(rom.bss) + SIZEOF(rom.bss);
 
-  . = 0x2000000;
+  /* rodata */
 
-  rom.rodata BLOCK(32) : ALIGN(4)
+  rom.rodata ALIGN(32) : SUBALIGN(4)
   {
     *(.rodata)
     . = (. + 0x1f) & ~0x1f;
-  } > ewram AT > gprom
+  } >iwram AT> gprom
 
   __rodata_link_start = ADDR(rom.rodata);
   __rodata_link_end = ADDR(rom.rodata) + SIZEOF(rom.rodata);
